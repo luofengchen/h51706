@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<style type="text/css">
+			body {
+				height: 10000px;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<script type="text/javascript">
+			//			v
+			//			document.onscroll= function  () {
+			//				var srcoll = document.documentElement.scrollTop;
+			//			console.log(document.documentElement.clientHeight,srcoll);
+			//			}
+			var a = { n: 1 };
+			var b = a;
+			a.x = 3;
+			console.log(b)
+			console.log(b,a)
+			console.log(a.x);
+			a.x = a = { n: 2 };
+			console.log(b,a)
+			console.log(a,a.x);
+			console.log(b.x);
+			//			console.log(a,b);
+		</script>
+	</body>
+
+</html>

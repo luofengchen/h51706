@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			body {
+				height: 10000px;
+			}
+			
+			ul, li {
+				padding: 0;
+				margin: 0;
+				list-style: none;
+			}
+			
+			img {
+				display: block;
+				border: none;
+			}
+			
+			#waterbox {
+				position: relative;
+			}
+			
+			#waterbox li {
+				position: absolute;
+				width: 210px;
+				padding: 10px;
+				border: 1px solid #CECECE;
+				/*float: left;*/
+			}
+			
+			li.cur {
+				position: absolute;
+				width: 210px;
+				padding: 10px 10px;
+				border: 1px solid #CECECE;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="waterbox">
+			<ul>
+				<li><img src="img01/P_000.jpg"></li>
+				<li><img src="img01/P_001.jpg"></li>
+				<li><img src="img01/P_002.jpg"></li>
+				<li><img src="img01/P_003.jpg"></li>
+				<li><img src="img01/P_004.jpg"></li>
+				<li><img src="img01/P_005.jpg"></li>
+				<li><img src="img01/P_006.jpg"></li>
+				<li><img src="img01/P_007.jpg"></li>
+				<li><img src="img01/P_008.jpg"></li>
+				<li><img src="img01/P_009.jpg"></li>
+				<li><img src="img01/P_010.jpg"></li>
+				<li><img src="img01/P_011.jpg"></li>
+				<li><img src="img01/P_012.jpg"></li>
+				<li><img src="img01/P_013.jpg"></li>
+				<li><img src="img01/P_014.jpg"></li>
+			</ul>
+		</div>
+		<script type="text/javascript">
+			var data = [];
+////			console.log(typeof data)
+//			for(var i = 10; i < 30; i++) {
+//				data.push(`img01/P_0${i}.jpg`);
+//			}
+			function waterFall(obj, ml, mt) {
+				var obox = document.getElementById(obj);
+				var oul = obox.children[0];
+				var oali = oul.getElementsByTagName("li");
+				var zwidth = obox.offsetWidth;
+				var perwidth = oali[0].offsetWidth + ml;
+				var cols = Math.floor(zwidth / perwidth);
+				var colsarr = [];
+				//				console.log(cols);
+				var count = 0;
+				for(var i = 0; i < cols; i++) {
+					//生成第一行图片位置并排列 添加目前的每个图片的高度到一个数组
+					oali[i].style.top = 0;
+					oali[i].style.left = i * perwidth + "px";
+					colsarr.push(oali[i].offsetHeight + mt);
+				}
+				conpos(cols);
+				console.log(colsarr, cols);
+				window.onscroll = function(e) {
+					var eve = e || event;
+					var scrolltop = document.documentElement.scrollTop || document.body.scrollTop;
+					var clientheight = document.documentElement.clientHeight || document.body.clientHeight;
+					var minindex = getMinIndex(colsarr);
+					var minval = colsarr[minindex];
+					var ls_gd = scrolltop + clientheight;
+					console.log(minval,ls_gd)
+					if(minval <= ls_gd) {
+						for(var i = 0; i < 20; i++) {
+							var oli = document.createElement("li");
+//							oli.className = "cur";
+							var oimg = document.createElement("img");
+							oimg.src = `img01/P_${sjz(i)}.jpg`;
+							oli.appendChild(oimg);
+							oul.appendChild(oli);
+						}
+						conpos(oali.length - 20);
+					}
+				}
+
+				function sjz(num) {
+					if(num > 160) {
+						num = 1;
+					}
+					if(num < 10 && num >= 0) {
+						return "00" + num;
+					} else if(num >= 10 && num < 100) {
+						return "0" + num;
+					} else {
+						return num;
+					}
+				}
+
+				function conpos(num) {
+					// 循环设置第二行开始的其他的图片位置
+					for(var j = num; j < oali.length; j++) {
+						var minindex = getMinIndex(colsarr);
+						oali[j].style.left = minindex * perwidth + "px";
+						oali[j].style.top = colsarr[minindex] + "px";
+						colsarr[minindex] = colsarr[minindex] + oali[j].offsetHeight + mt;
+					}
+				}
+
+				function getMinIndex(arr) {
+//					console.log(arr);
+					var minval = Math.min.apply(null, arr);
+					var minindex = arr.indexOf(minval);
+					return minindex;
+				}
+			}
+
+			window.onresize = window.onload = function() {
+				waterFall('waterbox', 10, 10);
+			}
+		</script>
+	</body>
+
+</html>

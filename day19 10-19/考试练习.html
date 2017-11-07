@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+		<script type="text/javascript">
+			var a = 10,
+				b = 20,
+				c = 30;
+
+			function chang(b) {
+				console.log(arguments);
+				var a = 40;
+				c = 60;
+				console.log(a, b, c);
+				b = 30;
+			}
+			chang(a, b, c);
+			console.log(a, b, c);
+			console.log(3+5+"10"+7+5)
+		</script>
+	</body>
+
+</html>

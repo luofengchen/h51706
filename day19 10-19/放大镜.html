@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>放大镜</title>
+		<style type="text/css">
+			ul, li {
+				padding: 0;
+				margin: 0;
+				list-style: none;
+			}
+			#fdkj{
+				position: relative;
+				width: 400px;
+				height: 400px;
+				border: 1px solid #000;	
+			}
+			#fdkj>img{
+				width: 400px;
+				height: 400px;
+			}
+			#zoom{
+				position: absolute;
+				width: 200px;
+				height: 200px;
+				background: skyblue;
+				opacity: .4;
+				display: none;
+				cursor: move;
+			}
+			#bigpt{
+				position: absolute;
+				top: 0px;
+				left: 500px;
+				/*top: 20px;*/
+				width: 400px;
+				height: 400px;
+				display: none;
+				overflow: hidden;
+				/*border: 1px solid #000;*/
+			}
+			#bigpt img{
+				width: 800px;
+				height: 800px;
+				position: absolute;
+			}
+			#smkj{
+				margin-top: 10px;
+				width: 400px;
+				height: 80px;
+			}
+			#smkj li{
+				float: left;
+				margin-right: 20px;
+				width: 54px;
+				height: 54px;
+				padding: 10px;
+				border: 3px solid white;
+			}
+			
+			#smkj li:hover,#smkj li.hover{
+				border: 3px solid skyblue;
+				
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="fdkj">
+			<img src="img/yxpt1.jpg" />
+			<div id="zoom">
+			</div>
+			
+		</div>
+			<div id="bigpt">
+				<img src="img/bigpt1.jpg" />
+			</div>
+			<ul id="smkj">
+				<li><img src="img/smpt1.jpg"/></li>
+				<li><img src="img/smpt2.jpg"/></li>
+				<li><img src="img/smpt3.jpg"/></li>
+				<li><img src="img/smpt4.jpg"/></li>
+			</ul>
+			<script type="text/javascript">
+				var odiv = document.getElementById("fdkj");
+				var ozoom = document.getElementById("zoom");
+				var obigpt = document.getElementById("bigpt");
+				var oimgyx = odiv.children[0];
+				var oimgbg = obigpt.children[0];
+				var osmul  = document.getElementById("smkj");
+				var osmli = osmul.getElementsByTagName("li");
+				odiv.onmousemove = function  (e) {
+					var eve = e||event;
+					ozoom.style.display = "block";
+					obigpt.style.display = "block";
+					var _left = eve.pageX - odiv.offsetLeft -ozoom.offsetWidth/2;
+					var _top = eve.pageY - odiv.offsetTop -ozoom.offsetHeight/2;
+					
+					
+					if (_left<=0) {
+						_left = 0
+					}
+					if (_top<=0) {
+						_top = 0
+					}
+					if (_left>=odiv.offsetWidth - ozoom.offsetWidth) {
+						_left = odiv.offsetWidth - ozoom.offsetWidth;
+					}
+					if (_top>=odiv.offsetHeight - ozoom.offsetHeight) {
+						_top = odiv.offsetHeight - ozoom.offsetHeight;
+					}
+					ozoom.style.left = _left + "px";
+					ozoom.style.top = _top + "px";
+					var _lsleft = ozoom.offsetWidth/odiv.offsetWidth;
+					var _lstop = ozoom.offsetHeight/odiv.offsetHeight;
+					oimgbg.style.left = -ozoom.offsetLeft/odiv.offsetWidth*oimgbg.offsetWidth + "px";
+					console.log(ozoom.offsetLeft/odiv.offsetWidth*oimgbg.offsetWidth);
+					oimgbg.style.top = -ozoom.offsetTop/odiv.offsetHeight*oimgbg.offsetHeight + "px";
+					console.log(ozoom.offsetTop/odiv.offsetHeight*oimgbg.offsetHeight);
+				}
+				//放大镜向右移动的距离与中图区域宽度的比 和  大图向左移动的距离和大图宽度的比 相等
+				odiv.onmouseout = function  () {
+					ozoom.style.display = "none";
+					obigpt.style.display = "none";
+				}
+				for (let i = 0; i < osmli.length; i++) {
+					osmli[i].onmouseenter = function  () {
+						for (var j = 0; j < osmli.length; j++) {
+							osmli[j].className = "";
+							console.log(osmli[j])
+						}
+							osmli[i].className= "hover";
+							oimgyx.src =`img/yxpt${i+1}.jpg`
+							oimgbg.src =`img/bigpt${i+1}.jpg`
+					}
+				}
+			</script>
+	</body>
+
+</html>

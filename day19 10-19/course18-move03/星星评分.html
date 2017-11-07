@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			ul,li{
+				padding: 0;
+				margin: 0;
+				list-style: none;
+			}
+			li{
+				float: left;
+				width: 27px;
+				height: 28px;
+				background: url(img/star.gif) no-repeat 0 0;
+			}
+		</style>
+	</head>
+	<body>
+		<ul id="score">
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+		<span id="num"></span>
+		<script>
+			var oUl = document.getElementById("score");
+			var oNum = document.getElementById("num");
+			var aLi = oUl.children;
+			var arr = ["111111","22222","33333","444444","555555"];
+			var flag = false;//鼠标是否点击
+			var index = 0;
+			for(let i = 0; i < aLi.length; i++){
+				aLi[i].onmouseover = function(){
+					
+					for(var j = 0; j < aLi.length; j++){
+						aLi[j].style.background = "url(img/star.gif) no-repeat 0 0";
+					}
+					
+					for(var j = 0; j <= i; j++){
+						aLi[j].style.background = "url(img/star.gif) no-repeat 0 -28px";
+					}
+					
+					oNum.innerHTML = arr[i] ;
+				}
+				aLi[i].onmouseout = function(){
+					
+					for(var j = 0; j < aLi.length; j++){
+							aLi[j].style.background = "url(img/star.gif) no-repeat 0 0";
+					}
+					if(flag){
+						for(var j = 0; j <= index; j++){
+							aLi[j].style.background = "url(img/star.gif) no-repeat 0 -28px";
+						}
+					}else{
+						for(var j = 0; j < aLi.length; j++){
+							aLi[j].style.background = "url(img/star.gif) no-repeat 0 -28px";
+						}
+					}
+					
+				}
+				aLi[i].onclick = function(){
+					flag = true;
+					index = i;
+				}
+			}
+			//假设不在划入时，确定分数，在点击时确定分数 添加一个onmouseout
+			
+			//在点击时确定
+			
+			
+			
+			
+		</script>
+	</body>
+</html>

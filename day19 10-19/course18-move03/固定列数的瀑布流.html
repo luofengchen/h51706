@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">ul,
+li {
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+
+li {
+	width: 225px;
+}
+
+ul {
+	float: left;
+}</style>
+	</head>
+	<body>
+		<div id="waterfall">
+			<ul>
+			<li><img src="img2/1.jpg"></li>
+			<li><img src="img2/2.jpg"></li>
+			<li><img src="img2/3.jpg"></li>
+			<li><img src="img2/4.jpg"></li>
+		</ul>
+		<ul>
+			<li><img src="img2/4.jpg"></li>
+			<li><img src="img2/5.jpg"></li>
+			<li><img src="img2/6.jpg"></li>
+			<li><img src="img2/3.jpg"></li>
+		</ul>
+		<ul>
+			<li><img src="img2/7.jpg"></li>
+			<li><img src="img2/8.jpg"></li>
+			<li><img src="img2/9.jpg"></li>
+			<li><img src="img2/3.jpg"></li>
+		</ul>
+		<ul>
+			<li><img src="img2/1.jpg"></li>
+			<li><img src="img2/2.jpg"></li>
+			<li><img src="img2/3.jpg"></li>
+			<li><img src="img2/3.jpg"></li>
+		</ul>
+		<ul>
+			<li><img src="img2/4.jpg"></li>
+			<li><img src="img2/5.jpg"></li>
+			<li><img src="img2/6.jpg"></li>
+			<li><img src="img2/3.jpg"></li>
+		</ul>
+		<ul>
+			<li><img src="img2/7.jpg"></li>
+			<li><img src="img2/8.jpg"></li>
+			<li><img src="img2/9.jpg"></li>
+			<li><img src="img2/3.jpg"></li>
+		</ul>
+		</div>
+		
+		<script type="text/javascript">
+			//列数是固定（提前通过样式写好），每一列的高度不一致，
+			//正常在没有滚动滚动条时，按照静态数据显示
+			//有滚动条时，当滚动条滚动时加载数据，但是加载数据有个条件，是当当前显示区域有空白出现时再去加载数据
+		
+		var oWrap = document.getElementById("waterfall");
+		var aUl = oWrap.children;
+		var data = ["img2/3.jpg","img2/5.jpg","img2/7.jpg"];//后台请求的数据
+		window.onscroll = function(){
+			//求出可视区域高度和滚动条滚动距离的和
+			var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+			var clientHeight =document.documentElement.clientHeight || document.body.clientHeight;
+			var hei = scrollTop + clientHeight;
+			//让hei和每一列中的最后一个区块的底部距离顶部的高度（lastHei）进行比较，如果说lastHei <= hei 开始填充图片
+			
+			//遍历所有的列（ul），找到最后一个区块
+			
+			for(var i = 0; i < aUl.length; i++){
+				//取得每列中所有的区块
+				var aLi = aUl[i].children;
+				//找到该列中最后一个区块
+				var lastLi = aLi[aLi.length-1];
+				//求出距离
+				var lastHei = lastLi.offsetTop + lastLi.offsetHeight;
+				
+				if(lastHei <= hei){
+					//真实情况，要发送ajax请求，返回数据
+					//遍历数据，追加到当前列中
+					for(var j = 0; j < data.length; j++){
+						var oLi = document.createElement("li");
+						var oImg = document.createElement("img");
+						oImg.src = data[j];
+						oLi.appendChild(oImg);
+						aUl[i].appendChild(oLi);
+					}
+
+				}
+				
+			}
+			
+		}
+		
+		
+		
+		
+		</script>
+	</body>
+</html>

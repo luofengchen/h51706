@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>固定列数的瀑布流</title>
+		<style type="text/css">
+			ul, li {
+				margin: 0;
+				padding: 0;
+				list-style: none;
+			}
+			
+			body {
+				padding: 0;
+				margin: 0;
+				/*height: 10000px;*/
+			}
+			
+			#oul ul {
+				float: left;
+				width: 190px;
+				margin: 20px;
+				/*background: white;*/
+			}
+			
+			#oul li {
+				width: 190px;
+				padding: 10px;
+				/*background: url() repeat scroll center left;*/
+			}
+			
+			#oul li img {
+				width: 190px;
+				height: auto;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="oul">
+			<ul>
+				<li><img/></li>
+				<li><img/></li>
+				<li><img/></li>
+				<!--<li><img src="img01/P_005.jpg"/></li>-->
+			</ul>
+			<ul>
+				<li><img/></li>
+				<li><img/></li>
+				<li><img/></li>
+				<!--<li><img src="img01/P_005.jpg"/></li>-->
+			</ul>
+			<ul>
+				<li><img/></li>
+				<li><img/></li>
+				<li><img/></li>
+				<!--<li><img src="img01/P_005.jpg"/></li>-->
+			</ul>
+			<ul>
+				<li><img/></li>
+				<li><img/></li>
+				<li><img/></li>
+				<!--<li><img src="img01/P_005.jpg"/></li>-->
+			</ul>
+			<ul>
+				<li><img/></li>
+				<li><img/></li>
+				<li><img/></li>
+				<!--<li><img src="img01/P_005.jpg"/></li>-->
+			</ul>
+
+		</div>
+		<script src="common.js" type="text/javascript"></script>
+		<script type="text/javascript">
+			var oul = document.getElementsByTagName("ul");
+			var ali = document.getElementsByTagName("li");
+			//			var  data = {"img"}
+			//			var lsli =
+			console.log(ali);
+			console.log(ali.length);
+			onload = function() {
+				var count = 0;
+				for(var i = 0; i < ali.length; i++) {
+				console.log("aaa");
+				ali[i].children[0].src = `img01/P_${sjz(i)}.jpg`;
+				}	
+				window.onscroll = function() {
+					var oscrolltop = document.documentElement.scrollTop || document.body.scrollTop;
+					var ohei = document.documentElement.clientHeight || document.body.clientHeight;
+					console.log(oscrolltop, ohei);
+					for(var i = 0; i < oul.length; i++) {
+						var lsli = oul[i].children;
+
+						var lastli = lsli[lsli.length - 1];
+						console.log(lastli);
+						var lasttop = lastli.offsetHeight + lastli.offsetTop;
+						var hei = oscrolltop + ohei;
+						//					console.log(oul[i], ali.length)
+						console.log(lastli, hei);
+						if(hei >= lasttop) {
+							count += 1;
+							if(count > 160) {
+								count = 0
+							}
+							var oli = document.createElement("li");
+							var oimg = document.createElement("img");
+							oimg.src = `img01/P_${sjz(count)}.jpg`;
+							oli.appendChild(oimg);
+							oul[i].appendChild(oli);
+						}
+					}
+
+				}
+
+				function sjz(num) {
+					if(num > 160) {
+						num = 1;
+					}
+					if(num < 10 && num >= 0) {
+						return "00" + num;
+					} else if(num >= 10 && num < 100) {
+						return "0" + num;
+					} else {
+						return num;
+					}
+				}
+
+			}
+		</script>
+	</body>
+
+</html>

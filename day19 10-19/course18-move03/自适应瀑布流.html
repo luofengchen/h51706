@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			ul,li{
+				padding: 0;
+				margin: 0;
+				list-style: none;
+			}
+			img{
+				display: block;
+				border: none;
+			}
+			#wrap{
+				position: relative;
+			}
+			#wrap li{
+				position: absolute;
+				width: 225px;
+				border: 1px solid #CECECE;
+			}
+			
+		</style>
+	</head>
+	<body>
+		<div id="wrap">
+			<ul>
+				<li><img src="img2/1.jpg">aaa</li>
+				<li><img src="img2/2.jpg">aa</li>
+				<li><img src="img2/3.jpg">aaaa</li>
+				<li><img src="img2/4.jpg"></li>
+				<li><img src="img2/5.jpg"></li>
+				<li><img src="img2/6.jpg"></li>
+				<li><img src="img2/7.jpg"></li>
+				<li><img src="img2/8.jpg"></li>
+				<li><img src="img2/9.jpg"></li>
+				<li><img src="img2/1.jpg"></li>
+				<li><img src="img2/2.jpg"></li>
+				<li><img src="img2/3.jpg"></li>
+				<li><img src="img2/4.jpg"></li>
+				<li><img src="img2/5.jpg"></li>
+				<li><img src="img2/6.jpg"></li>
+				<li><img src="img2/7.jpg"></li>
+				<li><img src="img2/8.jpg"></li>
+				<li><img src="img2/9.jpg"></li>
+			</ul>
+		</div>
+		<script type="text/javascript">
+			
+			var data = ["img2/3.jpg","img2/5.jpg","img2/7.jpg"];//后台请求的数据
+			//需要确定那个html模块需要瀑布流布局
+			//ml，mt表示左间距和上间距
+			function waterFall(id,ml,mt){
+				var oWrap = document.getElementById(id);
+				var aLi = oWrap.getElementsByTagName("li");
+				//获取瀑布流显示区域的宽度
+				var totalWidth = oWrap.offsetWidth;
+				var perWidth = aLi[0].offsetWidth+ml;
+				var cols = Math.floor(totalWidth/perWidth);
+				
+				var arrH = [];//用来保存每一列的高度	
+				//先排第一行
+				for(var i = 0 ; i < cols; i++){
+					aLi[i].style.top = 0;
+					aLi[i].style.left = i*perWidth + "px";
+					console.log(aLi[i].offsetHeight);
+					arrH.push(aLi[i].offsetHeight + mt);
+				}
+				//排后续的的区块
+				conPos(cols);
+				window.onscroll = function(){
+					var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+					var clientHeight = document.documentElement.clientHeight || document.body.clientHeight;
+					var minIndex = getMinIndex(arrH);
+					var minVal = arrH[minIndex];
+					if(minVal <= scrollTop + clientHeight){
+						for(var i = 0; i < data.length; i++){
+							var oLi = document.createElement("li");
+							var oImg = document.createElement("img");
+							oImg.src = data[i];
+							oLi.appendChild(oImg);
+							oWrap.children[0].appendChild(oLi);
+						}
+						conPos(aLi.length-data.length);
+					}
+				}
+				
+				//确定位置方法
+				function conPos(initNum){
+					for(var j = initNum; j < aLi.length; j++){
+						var minIndex = getMinIndex(arrH);
+						aLi[j].style.left = minIndex * perWidth + "px";
+						aLi[j].style.top = arrH[minIndex] + "px";
+						//重新改变最小索引对应的值，进行下次计算
+						arrH[minIndex] = arrH[minIndex] + aLi[j].offsetHeight + mt;
+					}
+				}
+				
+			}
+			
+			function getMinIndex(arr){
+				//取数组中的最小值
+				var minVal = Math.min.apply(null,arr);
+				var minIndex = arr.indexOf(minVal);
+				return minIndex;
+			}
+			
+			window.onresize = window.onload = function(){
+				waterFall("wrap",10,10);
+			}
+		</script>
+	</body>
+</html>

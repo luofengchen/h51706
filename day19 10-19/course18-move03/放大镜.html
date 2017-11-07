@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			ul,li{
+				padding: 0;
+				margin: 0;
+				list-style: none;
+			}
+			#zoomBox{
+				position: relative;
+				width: 400px;
+				height: 400px;
+				margin: 20px;
+				border: 1px solid #CECECE;
+			}
+			#midArea{
+				cursor: move;
+			}
+			#midArea img{
+				width: 400px;
+				height: 400px;
+			}
+			#zoom{
+				display: none;
+				position: absolute;
+				width: 200px;
+				height: 200px;
+				background: yellow;
+				opacity: .5;
+			}
+			#bigArea{
+				display: none;
+				position: absolute;
+				top: -1px;
+				left: 401px;
+				width: 400px;
+				height: 400px;
+				overflow: hidden;
+				border: 1px solid #CECECE;
+			}
+			
+			#bigArea img{
+				position: absolute;
+				width: 800px;
+				height: 800px;
+			}
+			
+			#smallArea{
+				position: absolute;
+				left: 0;
+				bottom: -85px;
+				width: 400px;
+				height: 80px;
+				overflow: hidden;
+			}
+			#smallArea li{
+				float: left;
+				width: 56px;
+				height: 56px;
+				padding: 10px;
+				border: 2px solid white;
+			}
+			#smallArea li img{
+				width: 56px;
+				height: 56px;
+			}
+			#smallArea li:hover,#smallArea li.hover{
+				border:2px solid red;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="zoomBox">
+			<div id="midArea">
+				<img src="img/m01.jpg">
+				<div id="zoom"></div>
+			</div>
+			<div id="bigArea">
+				<img src="img/m01.jpg">
+			</div>
+			<div id="smallArea">
+				<ul>
+					<li><img src="img/m01.jpg"></li>
+					<li><img src="img/m02.jpg"></li>
+					<li><img src="img/m03.jpg"></li>
+					<li><img src="img/m04.jpg"></li>
+					<li><img src="img/m05.jpg"></li>
+				</ul>
+			</div>
+		</div>
+		<script type="text/javascript">
+			var oZoomBox = document.getElementById("zoomBox");
+			var oMidArea = document.getElementById("midArea");
+			var oZoom = document.getElementById("zoom");
+			var oBigArea = document.getElementById("bigArea");
+			var oBigImg = oBigArea.children[0];
+			var oSmallArea = document.getElementById("smallArea");
+			var aSmallLists = oSmallArea.children[0].children;
+			
+			oMidArea.onmousemove = function(e){
+				var evt = e || event;
+				oZoom.style.display = "block";
+				oBigArea.style.display = "block";
+				
+				//因为放大镜是相对于oZoomBox定位的，需要用鼠标坐标值减去oZoomBox距离可视区域左边和上边的距离
+				//假设放大镜是相对于oMidArea定位的，需要用鼠标坐标值减去oZoomBox距离可视区域左边和上边的距离，还要减去oMidArea
+				//距离oZoomBox的距离
+				var _left = evt.clientX - oZoomBox.offsetLeft - oZoom.offsetWidth/2;
+				var _top = evt.clientY - oZoomBox.offsetTop - oZoom.offsetHeight/2;
+				
+				//不能越界
+				
+				if(_left <= 0){
+					_left = 0;
+				}
+				if(_top <= 0){
+					_top = 0;
+				}
+				if(_left >= oMidArea.offsetWidth - oZoom.offsetWidth){
+					_left = oMidArea.offsetWidth - oZoom.offsetWidth;
+				}
+				if(_top >= oMidArea.offsetHeight - oZoom.offsetHeight){
+					_top = oMidArea.offsetHeight - oZoom.offsetHeight;
+				}
+				oZoom.style.left = _left + "px";
+				oZoom.style.top = _top + "px";
+				//放大镜向右移动的距离与中图区域宽度的比 和  大图向左移动的距离和大图宽度的比 相等
+				oBigImg.style.left = -oZoom.offsetLeft/oMidArea.offsetWidth*oBigImg.offsetWidth + "px";
+				oBigImg.style.top = -oZoom.offsetTop/oMidArea.offsetHeight*oBigImg.offsetHeight + "px";
+				
+				
+			}
+			oMidArea.onmouseout = function(){
+				oZoom.style.display = "none";
+				oBigArea.style.display = "none";
+				
+			}
+			
+			for(let i = 0; i < aSmallLists.length; i++){
+				aSmallLists[i].onclick = function(){
+					for(var j = 0; j < aSmallLists.length; j++){
+						aSmallLists[j].className = "";
+					}
+					this.className = "hover";
+					oMidArea.children[0].src = "img/m0"+(i+1)+".jpg";
+					oBigImg.src = "img/m0"+(i+1)+".jpg";
+				}
+			}
+		</script>
+	</body>
+</html>
